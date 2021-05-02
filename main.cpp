@@ -2,11 +2,17 @@
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 #include <string.h>
+#include <cmath>
 
 //Windows dimensions
 const GLint width = 800, height = 600;
 
-GLuint VAO, VBO, shader;
+GLuint VAO, VBO, shader, uniform_move_x;
+
+bool direction = true;
+float triangle_offset = 0.0f;
+float triangle_max_offset = 0.7f;
+float triangle_inc_offset = 0.00005f;
 
 //Vertex Shader
 static const char* vShader = "                                      \n\
@@ -14,9 +20,11 @@ static const char* vShader = "                                      \n\
                                                                     \n\
 layout (location = 0) in vec3 pos;                                  \n\
                                                                     \n\
+uniform float xMove;                                                \n\
+                                                                    \n\
 void main()                                                         \n\
 {                                                                   \n\
-gl_Position = vec4(pos.x, pos.y, pos.z, 1.0);           \n\
+    gl_Position = vec4(0.6 * pos.x , xMove * pos.y, pos.z, 1.0);       \n\
 }";
 
 //Fragment Shader
@@ -35,8 +43,8 @@ void create_triangle()
 	//Vertices for the triangle
 	GLfloat vertices[] = {
 		-1.0f, -1.0f, 0.0f,
-		2.5f, -3.5f, 0.0f,
-		0.3f, 0.5f, 0.0f
+		1.0f, -1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f
 	};
 
 	//Binding the Vertex Array Object
@@ -118,6 +126,8 @@ void compile_shaders()
 		printf("Error Validating Program:-\n'%s'", eLog);
 		return;
 	}
+
+	uniform_move_x = glGetUniformLocation(shader, "xMove");
 }
 
 int main()
@@ -179,11 +189,27 @@ int main()
 		//Get and handle user input events (clicking a button, pressing a button, etc.)
 		glfwPollEvents();
 
+		if (direction)
+		{
+			triangle_offset += triangle_inc_offset;
+		}
+		else
+		{
+			triangle_offset -= triangle_inc_offset;
+		}
+
+		if (abs(triangle_offset) >= triangle_max_offset)
+		{
+			direction = !direction;
+		}
+
 		//Clear window
-		glClearColor(0.0f, 0.0f, 0.3f, 1.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glUseProgram(shader);
+
+		glUniform1f(uniform_move_x, triangle_offset);
 
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
