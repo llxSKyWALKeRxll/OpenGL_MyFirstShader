@@ -16,9 +16,14 @@ GLuint VAO, VBO, shader, uniform_model;
 bool direction = true;
 float triangle_offset = 0.0f;
 float triangle_max_offset = 0.4f;
-float triangle_inc_offset = 0.00007f;
+float triangle_inc_offset = 0.00017f;
 
 float curAngle = 0.0f;
+
+float size_direction = true;
+float curSize = 0.4f;
+float maxSize = 0.7f;
+float minSize = 0.2f;
 
 //Vertex Shader
 static const char* vShader = "                                      \n\
@@ -30,7 +35,7 @@ uniform mat4 model;                                                 \n\
                                                                     \n\
 void main()                                                         \n\
 {                                                                   \n\
-    gl_Position = model * vec4(pos.x * 0.4, pos.y * 0.2, pos.z, 1.0);       \n\
+    gl_Position = model * vec4(pos, 1.0);                           \n\
 }";
 
 //Fragment Shader
@@ -215,6 +220,19 @@ int main()
 			curAngle -= 360;
 		}
 
+		if (size_direction)
+		{
+			curSize += 0.0001f;
+		}
+		else
+		{
+			curSize -= 0.0001f;
+		}
+		if (curSize >= maxSize || curSize <= minSize)
+		{
+			size_direction = !size_direction;
+		}
+
 		//Clear window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -226,7 +244,8 @@ int main()
 		//model = glm::translate(model, glm::vec3(triangle_offset, 0.0f, 0.0f));
 		//model = glm::rotate(model, curAngle * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::translate(model, glm::vec3(triangle_offset, 0.0f, 0.0f));
-		model = glm::rotate(model, curAngle * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		//model = glm::rotate(model, curAngle * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::scale(model, glm::vec3(curSize, curSize, 1.0f));
 
 		//glUniform1f(uniform_model, triangle_offset);
 		glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(model));
