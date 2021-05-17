@@ -11,7 +11,7 @@
 const GLint width = 800, height = 600;
 const float toRadians = 3.141592653589793238f / 180.0f;
 
-GLuint VAO, VBO, IBO, shader, uniform_model;
+GLuint VAO, VBO, IBO, shader, uniform_model, uniform_projection;
 
 bool direction = true;
 float triangle_offset = 0.0f;
@@ -33,10 +33,11 @@ layout (location = 0) in vec3 pos;                                  \n\
                                                                     \n\
 out vec4 vCol;                                                      \n\
 uniform mat4 model;                                                 \n\
+uniform mat4 projection;                                            \n\
                                                                     \n\
 void main()                                                         \n\
 {                                                                   \n\
-    gl_Position = model * vec4(pos, 1.0);                           \n\
+    gl_Position = projection * model * vec4(pos, 1.0);              \n\
 	vCol = vec4(clamp(pos, 0.0f, 1.0f), 1.0f);                      \n\
 }";
 
@@ -86,9 +87,9 @@ void create_triangle()
 
 	//Unbinding VAO AND VBO
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
 	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 void add_shader(GLuint main_program, const char* shader_code, GLenum shader_type)
@@ -155,6 +156,7 @@ void compile_shaders()
 	}
 
 	uniform_model = glGetUniformLocation(shader, "model");
+	uniform_projection = glGetUniformLocation(shader, "projection");
 }
 
 int main()
@@ -212,6 +214,8 @@ int main()
 	create_triangle();
 	compile_shaders();
 
+	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)bufferWidth / (GLfloat)bufferHeight, 0.1f, 100.0f);
+
 	//Main loop
 	while (!glfwWindowShouldClose(screen))
 	{
@@ -232,7 +236,7 @@ int main()
 			direction = !direction;
 		}
 
-		curAngle += 0.01f;
+		curAngle += 0.02f;
 		if (curAngle >= 360)
 		{
 			curAngle -= 360;
@@ -261,21 +265,22 @@ int main()
 		//model = glm::rotate(model, 45 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		//model = glm::translate(model, glm::vec3(triangle_offset, 0.0f, 0.0f));
 		//model = glm::rotate(model, curAngle * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-		//model = glm::translate(model, glm::vec3(triangle_offset, 0.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -3.0f));
 		model = glm::rotate(model, curAngle * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
 
 		//glUniform1f(uniform_model, triangle_offset);
 		glUniformMatrix4fv(uniform_model, 1, GL_FALSE, glm::value_ptr(model));
+		glUniformMatrix4fv(uniform_projection, 1, GL_FALSE, glm::value_ptr(projection));
 
 		glBindVertexArray(VAO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 		//glDrawArrays(GL_TRIANGLES, 0, 3);
 		glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		glBindVertexArray(0);
 		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glBindVertexArray(0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 		glUseProgram(0);
 
