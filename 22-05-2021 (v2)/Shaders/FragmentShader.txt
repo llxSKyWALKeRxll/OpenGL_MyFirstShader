@@ -1,0 +1,12 @@
+#version 330
+
+in vec4 vCol;
+in vec2 texPos;
+out vec4 colour;
+
+uniform sampler2D the_texture;
+
+void main()
+{
+	colour = texture(the_texture, texPos);
+}
