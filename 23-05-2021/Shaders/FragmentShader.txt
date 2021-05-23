@@ -1,0 +1,104 @@
+#version 330
+
+in vec4 vCol;
+in vec2 texPos;
+in vec3 normal;
+in vec3 fragPos;
+
+out vec4 colour;
+
+const int MAX_POINT_LIGHTS = 3;
+
+struct Light
+{
+	vec3 colour;
+	float ambient_intensity;
+	float diffuse_intensity;
+};
+
+struct directionalLight
+{
+	Light base;
+	vec3 direction;
+};
+
+struct pointLight
+{
+	Light base;
+	vec3 position;
+	float constant;
+	float linear;
+	float exponent;
+};
+
+struct Material
+{
+	float specular_intensity;
+	float shininess;
+};
+
+uniform int pointLightCounter;
+
+uniform directionalLight directional_light;
+uniform pointLight point_lights[MAX_POINT_LIGHTS];
+
+uniform sampler2D the_texture;
+uniform Material material;
+
+uniform vec3 eyePosition;
+
+vec4 calcLightByDirection(Light light, vec3 direction)
+{
+	vec4 ambient_colour = vec4(light.colour, 1.0f) * light.ambient_intensity;
+
+	float diffuse_factor = max(dot(normalize(normal), normalize(direction)), 0.0f);
+	vec4 diffuse_colour = vec4(light.colour, 1.0f) * light.diffuse_intensity * diffuse_factor;
+
+	vec4 specular_colour = vec4(0, 0, 0, 0);
+
+	if (diffuse_factor > 0.0f)
+	{
+		vec3 fragToEye = normalize(eyePosition - fragPos);
+		vec3 reflectedVertex = normalize(reflect(direction, normalize(normal)));
+
+		float specularFactor = dot(fragToEye, reflectedVertex);
+		if (specularFactor > 0.0f)
+		{
+			specularFactor = pow(specularFactor, material.shininess);
+			specular_colour = vec4(light.colour * material.specular_intensity * specularFactor, 1.0f);
+		}
+	}
+
+	return (ambient_colour + diffuse_colour + specular_colour);
+}
+
+vec4 calcDirectionalLight()
+{
+	return calcLightByDirection(directional_light.base, directional_light.direction);
+}
+
+vec4 calcPointLights()
+{
+	vec4 total_colour = vec4(0, 0, 0, 0);
+	for(int i = 0; i < pointLightCounter; i++)
+	{
+		vec3 direction = fragPos - point_lights[i].position;
+		float distance = length(direction);
+		direction = normalize(direction);
+		
+		vec4 colour = calcLightByDirection(point_lights[i].base, direction);
+		float attenuation = point_lights[i].exponent * distance * distance +
+							point_lights[i].linear * distance +
+							point_lights[i].constant;
+							
+		total_colour += (colour / attenuation); 
+	}
+	return total_colour;
+}
+
+void main()
+{
+	vec4 final_colour = calcDirectionalLight();
+	final_colour += calcPointLights();
+	colour = texture(the_texture, texPos) * final_colour;
+}
