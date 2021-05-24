@@ -13,3 +13,7 @@ Updated progress screenshots:
 ![o4](https://user-images.githubusercontent.com/79057173/119352494-5ffb1d00-bcbf-11eb-8e2c-8565cd542a63.PNG)
 
 ![o5](https://user-images.githubusercontent.com/79057173/119352503-61c4e080-bcbf-11eb-8c56-ba150a1a4d55.PNG)
+
+![o1](https://user-images.githubusercontent.com/79057173/119412631-d58bdb00-bd09-11eb-890d-a4647fb692bf.PNG)
+
+![o2](https://user-images.githubusercontent.com/79057173/119412636-d6bd0800-bd09-11eb-8cf0-faa586305fac.PNG)
