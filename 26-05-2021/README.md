@@ -1,1 +1,1 @@
-Added shadow mapping to the scene. =)
+Added shadow mapping (directional shadows) to the scene. =)
