@@ -2,7 +2,7 @@
 In this project, I will be implementing my first OpenGl application!
 
 # PREVIEW SCREENSHOTS
-Updated progress screenshots:
+The screenshots attached below are progressive in nature:
 
 ![o1](https://user-images.githubusercontent.com/79057173/119276691-21bb1a80-bc39-11eb-8f36-266c9a3573ae.PNG)
 
@@ -17,3 +17,7 @@ Updated progress screenshots:
 ![o1](https://user-images.githubusercontent.com/79057173/119412631-d58bdb00-bd09-11eb-890d-a4647fb692bf.PNG)
 
 ![o2](https://user-images.githubusercontent.com/79057173/119412636-d6bd0800-bd09-11eb-8cf0-faa586305fac.PNG)
+
+![o1](https://user-images.githubusercontent.com/79057173/119572476-6dec9300-bdd0-11eb-80f5-86d69cc2d6e4.PNG)
+
+![o2](https://user-images.githubusercontent.com/79057173/119572477-6e852980-bdd0-11eb-8ab1-c6a657dd7ce1.PNG)
