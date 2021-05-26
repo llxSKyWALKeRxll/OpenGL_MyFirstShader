@@ -1,4 +1,5 @@
-# DESCRIPTION
+# DESCRIPTION  
+(27-05-2021 has the latest code and files)  
 In this project, I will be implementing my first OpenGl application!  
   
  All in all, I made use of the Vertex Shader, Fragment Shader and the Geometry Shader in this project, and learnt so many new things!  
