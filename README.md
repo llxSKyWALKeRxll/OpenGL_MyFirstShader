@@ -1,11 +1,11 @@
 # DESCRIPTION  
 (27-05-2021 has the latest code and files)  
-In this project, I will be implementing my first OpenGl application!  
   
- All in all, I made use of the Vertex Shader, Fragment Shader and the Geometry Shader in this project, and learnt so many new things!  
- I have used the Unity engine before, but now I have gained so much knowledge as to how all the processes happen at the back-end.  
- I will probably make a playable 3D game at some point in time with the knowledge that I have gained now.  
- I am more comfortable with Java language, and I will most probably be making use of that language with OpenGL rather than C++ for my next project. =)
+In this project, I will be implementing my first OpenGl application!  
+All in all, I made use of the Vertex Shader, Fragment Shader and the Geometry Shader in this project, and learnt so many new things!  
+I have used the Unity engine before, but now I have gained so much knowledge as to how all the processes happen at the back-end.  
+I will probably make a playable 3D game at some point in time with the knowledge that I have gained now.  
+I am more comfortable with Java language, and I will most probably be making use of that language with OpenGL rather than C++ for my next project. =)
 
 # PREVIEW SCREENSHOTS
 The screenshots attached below are progressive in nature:
